@@ -1,3 +1,4 @@
+import * as Dialog from "@radix-ui/react-dialog";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { FileDown, Filter, MoreHorizontal, Plus, Search } from "lucide-react";
 import { useState } from "react";
@@ -5,6 +6,7 @@ import { useSearchParams } from "react-router-dom";
 import { Header } from "./components/header";
 import { Pagination } from "./components/pagination";
 import { Tabs } from "./components/tabs";
+import { TagForm } from "./components/tagForm";
 import { Button } from "./components/ui/button";
 import { Control, Input } from "./components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./components/ui/table";
@@ -32,6 +34,7 @@ export function App() {
   const [filter, setFilter] = useState(urlFilter)
 
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
+
   const handleFilter = () => {
     setSearchParams(params => {
       params.set('page', '1')
@@ -69,11 +72,30 @@ export function App() {
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold">Tags</h1>
 
-          <Button variant="primary">
-            <Plus className="size-3" />
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <Button variant="primary">
+                <Plus className="size-3" />
 
-            Create New
-          </Button>
+                Create New
+              </Button>
+            </Dialog.Trigger>
+
+            <Dialog.Portal>
+              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-70" />
+              <Dialog.Content className="fixed top-0 right-0 bottom-0 h-screen min-w-80 bg-zinc-950 border-l border-l-zinc-900 p-10 space-y-10">
+                <div className="space-y-3">
+                  <Dialog.Title className="text-xl font-bold">Create Tag</Dialog.Title>
+
+                  <Dialog.Description className="text-sm text-zinc-500">
+                    Tags can be used to group videos about similar concepts
+                  </Dialog.Description>
+                </div>
+
+                <TagForm />
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>          
         </div>
 
         <div className="flex items-center justify-between">
